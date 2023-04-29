@@ -1,5 +1,5 @@
 using glTFLoader;
-
+using glTFLoader.Schema;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +41,7 @@ namespace glTFLoaderUnitTests
 
             try
             {
-                var deserializedFile = Interface.LoadModel(filePath);
+                var deserializedFile = Interface.LoadModel<Gltf>(filePath);
                 Assert.NotNull(deserializedFile);
 
                 // read all buffers
@@ -99,7 +99,7 @@ namespace glTFLoaderUnitTests
 
                     using (var rm = new MemoryStream(wm.ToArray()))
                     {
-                        gltf = Interface.LoadModel(rm);
+                        gltf = Interface.LoadModel<Gltf>(rm);
                         Assert.NotNull(gltf);
                     }
                 }
@@ -115,7 +115,7 @@ namespace glTFLoaderUnitTests
 
                         using (var rm = new MemoryStream(wm.ToArray()))
                         {
-                            Interface.LoadModel(rm);
+                            Interface.LoadModel<Gltf>(rm);
                         }
 
                         using (var rm = new MemoryStream(wm.ToArray()))

@@ -31,13 +31,13 @@ namespace glTFLoader
         /// </summary>
         /// <param name="filePath">Source file path to a gltf/glb model</param>
         /// <returns><code>Schema.Gltf</code> model</returns>
-        public static Gltf LoadModel(string filePath)
+        public static T LoadModel<T>(string filePath)
         {
             var path = Path.GetFullPath(filePath);
 
             using (Stream stream = File.OpenRead(filePath))
             {
-                return LoadModel(stream);
+                return LoadModel<T>(stream);
             }
         }
 
@@ -46,7 +46,7 @@ namespace glTFLoader
         /// </summary>
         /// <param name="stream">Readable stream to a gltf/glb model</param>
         /// <returns><code>Schema.Gltf</code> model</returns>
-        public static Gltf LoadModel(Stream stream)
+        public static T LoadModel<T>(Stream stream)
         {
             bool binaryFile = false;
 
@@ -70,7 +70,7 @@ namespace glTFLoader
                 fileData = ParseText(stream);
             }
 
-            return JsonConvert.DeserializeObject<Gltf>(fileData);
+            return JsonConvert.DeserializeObject<T>(fileData);
         }
 
         private static string ParseText(Stream stream)
@@ -556,7 +556,7 @@ namespace glTFLoader
             string inputFileName = Path.GetFileNameWithoutExtension(inputFilePath);
             string inputDirectoryPath = Path.GetDirectoryName(inputFilePath);
 
-            var model = Interface.LoadModel(inputFilePath);
+            var model = Interface.LoadModel<Gltf>(inputFilePath);
             glTFLoader.Schema.Buffer binBuffer = null;
             byte[] binBufferData = null;
             if (model.Buffers != null && string.IsNullOrEmpty(model.Buffers[0].Uri))
@@ -717,7 +717,7 @@ namespace glTFLoader
             if (!File.Exists(inputGltfFilePath))
                 throw new ArgumentException("glTF file does not exists.", nameof(inputGltfFilePath));
 
-            Gltf model = Interface.LoadModel(inputGltfFilePath);
+            Gltf model = Interface.LoadModel<Gltf>(inputGltfFilePath);
 
             SaveBinaryModelPacked(model, outputGlbFile, inputGltfFilePath);
         }
